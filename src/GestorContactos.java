@@ -55,13 +55,4 @@ public class GestorContactos {
         frame.setSize(300, 200);
         frame.setVisible(true);
     }
-
-
-
-
-
-
-
-
-
 }

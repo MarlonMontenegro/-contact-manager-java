@@ -11,6 +11,7 @@ public class Main extends JFrame {
     private JTextField tfTelefono;
     private JTextField tfEmail;
     private JList listContactos;
+    private JButton DeleteBtn;
     private DefaultListModel<Contacto> listModelContactos;
 
 
@@ -29,6 +30,16 @@ public class Main extends JFrame {
         listContactos.setModel(listModelContactos);
 
 
+        /**
+         * Acción que se ejecuta al presionar el botón "Agregar Contacto".
+         *
+         * - Valida que los campos no estén vacíos.
+         * - Crea un nuevo objeto Contacto con los datos ingresados.
+         * - Agrega el contacto al gestor de contactos.
+         * - Lo añade a la lista visual (JList).
+         * - Limpia los campos del formulario después de agregar el contacto.
+         */
+
         addContactBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -36,13 +47,16 @@ public class Main extends JFrame {
 
 
                 // Asignacion y validacion de los datos.
+
                 String name = validateNotEmpty(tfName.getText(),"Nombre");
                 String apellido = validateNotEmpty(tfApellido.getText(),"Apellido");
                 String telefono = validateNotEmpty(tfTelefono.getText(),"Telefono");
                 String email = validateNotEmpty(tfEmail.getText(),"Email");
 
-                // Creamos el contacto;
+                //TODO: Realizar validacion de Email y telefono.
 
+
+                // Creamos del objeto contacto;
                 Contacto contacto = new Contacto(name, apellido, telefono, email);
                 gestor.agregarContacto(contacto);
 
@@ -59,6 +73,22 @@ public class Main extends JFrame {
         });
 
 
+        DeleteBtn.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Contacto selected = (Contacto) listContactos.getSelectedValue();
+                if (selected != null) JOptionPane.showMessageDialog(null, "Contacto Eliminado Correctamente!", "Contacto Eliminado", JOptionPane.INFORMATION_MESSAGE);
+                listModelContactos.removeElement(selected);
+                gestor.eliminarContacto(selected);
+
+                tfName.setText("");
+                tfApellido.setText("");
+                tfTelefono.setText("");
+                tfEmail.setText("");
+
+
+            }
+        });
     }
 
 
@@ -68,6 +98,7 @@ public class Main extends JFrame {
 
 
 
+    // TODO: Arreglar que cuando los datos no estan bien no deben quedar en null.
     public String validateNotEmpty(String input, String fieldName){
         if (input.isEmpty() || input.trim().isEmpty()) {
             JOptionPane.showMessageDialog(null, "El campo " + fieldName + " no puede estar vacío", "Advertencia", JOptionPane.WARNING_MESSAGE);
